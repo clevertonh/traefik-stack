@@ -1,0 +1,41 @@
+# traefik.toml
+################################################################
+# Global configuration
+################################################################
+
+#defaultEntryPoints = ["http", "https"]
+defaultEntryPoints = ["http"]
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+#    [entryPoints.http.redirect]
+#    entryPoint = "https"
+#  [entryPoints.https]
+#  address = ":443"
+#    [entryPoints.https.tls]
+
+#[acme]
+#email = "xx@xx.com"
+#storageFile = "/etc/traefik/acme/acme.json"
+#entryPoint = "https"
+#OnHostRule = true
+#onDemand = true
+
+#[[acme.domains]]
+#  main = "cab.re"
+#  sans = ["portainer.cab.re", "traefik.cab.re", "gitlab.cab.re"] 
+
+#[[acme.domains]]
+#  main = "test.cab.re"
+
+[web]
+address = ":8080"
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "svc.normiefree.zone"
+watch = true
+exposedbydefault = true
+
+
