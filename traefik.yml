@@ -30,7 +30,7 @@ services:
       traefik.frontend.entryPoints: '${TRAEFIK_ENTRY_POINTS:-http,https}'
     
     configs:
-      - source: ${TRAEFIK_TOML:-./traefik.toml}
+      - source: traefik_toml
         target: /etc/traefik/traefik.toml
     
     volumes:
@@ -69,3 +69,12 @@ networks:
   traefik:
     external:
       name: ${TRAEFIK_NETWORK:-traefik}
+
+#
+# ─── CONFIGS ────────────────────────────────────────────────────────────────────
+#
+
+configs:
+  traefik_toml:
+    external:
+      name: ${TRAEFIK_TOML:-traefik_toml}
