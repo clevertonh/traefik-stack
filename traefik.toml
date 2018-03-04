@@ -14,17 +14,20 @@ defaultEntryPoints = ["http", "https"]
    [entryPoints.https.tls]
 
 [acme]
-email       = "admin@normiefree.zone"
-storageFile = "/etc/traefik/acme/acme.json"
-entryPoint  = "https"
-OnHostRule  = true
-onDemand    = true
+  email       = "admin@normiefree.zone"
+  storageFile = "/etc/traefik/acme/acme.json"
+  entryPoint  = "https"
+  OnHostRule  = true
+  onDemand    = true
+
+[acme.httpChallenge]
+  entryPoint  = "http"
 
 [web]
-address = ":8080"
+  address     = ":8080"
 
 [docker]
-endpoint         = "unix:///var/run/docker.sock"
-domain           = "svc.normiefree.zone"
-watch            = true
-exposedbydefault = false
+  endpoint         = "unix:///var/run/docker.sock"
+  domain           = "svc.normiefree.zone"
+  watch            = true
+  exposedbydefault = false
