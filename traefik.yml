@@ -30,7 +30,7 @@ services:
       traefik.frontend.entryPoints: '${TRAEFIK_ENTRY_POINTS:-http,https}'
     
     configs:
-      - source: ${TRAEFIK_TOML:-./traefik.toml}
+      - source: traefik_config
         target: /etc/traefik/traefik.toml
     
     volumes:
@@ -69,3 +69,11 @@ networks:
   traefik:
     driver: overlay
     attachable: true
+
+#
+# ─── CONFIGS ────────────────────────────────────────────────────────────────────
+#
+
+configs:
+  traefik_config:
+    file: ${TRAEFIK_TOML:-./traefik.toml}
