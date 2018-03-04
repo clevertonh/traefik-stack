@@ -68,7 +68,8 @@ volumes:
 networks:
   traefik:
     driver: overlay
-    attachable: true
+    external:
+      name: ${TRAEFIK_NETWORK:-traefik}
 
 #
 # ─── CONFIGS ────────────────────────────────────────────────────────────────────
