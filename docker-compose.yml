@@ -1,24 +1,50 @@
-version: "3.3"
+# normiefree.zone | traefik-stack
+# Compose for the Traefik reverse proxy Docker Swarm stack.
+# John Lettman <the@johnlettman.com>
+
+version: '3.3'
+
+#
+# ─── SERVICES ───────────────────────────────────────────────────────────────────
+#
+
 services:
+
+  #
+  # SERVICE: Traefik (proxy)
+  # 
+
   proxy:
-    image: traefik
+    image:      traefik
+    restart:    always
+
+    hostname:   '${HOST_NAME:-traefik}'
+    domainname: '${DOMAIN_NAME:-local}'
+    
     labels:
-      - "traefik.frontend.rule=Host:traefik.svc.normiefree.zone"
-      - "traefik.port=8080"
-      - "traefik.backend=traefik"
-      - "traefik.frontend.entryPoints=http"
+      traefik.enable:               'true'
+      traefik.port:                 '${PORT}' # Backend management web server ports
+      traefik.protocol:             'http'    # Backend management web server protocols
+      traefik.backend:              'proxy'   # Docker Stack backend name
+      traefik.frontend.rule:        'Host:${HOST_NAME}.${DOMAIN_NAME}'
+      traefik.frontend.entryPoints: '${TRAEFIK_ENTRY_POINTS:-http,https}'
+    
     configs:
-      - source: traefik_config
+      - source: ./traefik.toml
         target: /etc/traefik/traefik.toml
+    
     volumes:
-      - acme:/etc/traefik/acme
-      - /var/run/docker.sock:/var/run/docker.sock
+      - acme:/etc/traefik/acme                    # ACME TLS persistence
+      - /var/run/docker.sock:/var/run/docker.sock # Docker socket
+    
     networks:
-      web_gw:
+      traefik:
+    
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
+      - '80:80'           # HTTP reverse proxy port
+      - '443:443'         # HTTPS TLS/SSL reverse proxy port
+      - '${PORT}:${PORT}' # HTTP management port
+    
     deploy:
       mode: global
       placement:
@@ -28,15 +54,18 @@ services:
         parallelism: 1
         delay: 10s
 
+#
+# ─── VOLUMES ────────────────────────────────────────────────────────────────────
+#
+
 volumes:
-  acme:
+  acme: # ACME TLS persistence
+
+#
+# ─── NETWORKS ───────────────────────────────────────────────────────────────────
+#
 
 networks:
-  web_gw:
+  traefik:
     external:
-      name: web_gw
-  
-configs:
-  traefik_config:
-    external:
-      name: traefik_config
+      name: ${TRAEFIK_NETWORK:-traefik}
