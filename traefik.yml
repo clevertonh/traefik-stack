@@ -67,6 +67,5 @@ volumes:
 
 networks:
   traefik:
-    name: ${TRAEFIK_NETWORK:-traefik}
     driver: overlay
     attachable: true
