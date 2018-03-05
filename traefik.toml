@@ -31,3 +31,4 @@ defaultEntryPoints = ["http", "https"]
   domain           = "svc.normiefree.zone"
   watch            = true
   exposedbydefault = false
+  swarmmode        = true
