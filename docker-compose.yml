@@ -21,14 +21,6 @@ services:
     hostname:   '${HOST_NAME:-traefik}'
     domainname: '${DOMAIN_NAME:-local}'
     
-    labels:
-      traefik.enable:               'true'
-      traefik.port:                 '${PORT}' # Backend management web server ports
-      traefik.protocol:             'http'    # Backend management web server protocols
-      traefik.backend:              'proxy'   # Docker Stack backend name
-      traefik.frontend.rule:        'Host:${HOST_NAME}.${DOMAIN_NAME}'
-      traefik.frontend.entryPoints: '${TRAEFIK_ENTRY_POINTS:-http,https}'
-    
     configs:
       - source: toml
         target: /etc/traefik/traefik.toml
@@ -47,12 +39,22 @@ services:
     
     deploy:
       mode: global
+
       placement:
         constraints:
           - node.role == manager
+
       update_config:
         parallelism: 1
         delay: 10s
+
+      labels:
+        traefik.enable:               'true'
+        traefik.port:                 '${PORT}' # Backend management web server ports
+        traefik.protocol:             'http'    # Backend management web server protocols
+        traefik.backend:              'proxy'   # Docker Stack backend name
+        traefik.frontend.rule:        'Host:${HOST_NAME}.${DOMAIN_NAME}'
+        traefik.frontend.entryPoints: '${TRAEFIK_ENTRY_POINTS:-http,https}'
 
 #
 # ─── VOLUMES ────────────────────────────────────────────────────────────────────
